@@ -1,18 +1,26 @@
+import java.io.File;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 
 public class firstClass {
+	
+	public static WebDriver driver=null;
 
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 			
 		System.setProperty("webdriver.chrome.driver","./drivers_folder/chromedriver.exe");
-		WebDriver driver=new ChromeDriver();
+		 driver=new ChromeDriver();
 		//WebDriver driver1=new InternetExplorerDriver();
 		
 		driver.get("https://www.amazon.in/");
@@ -45,7 +53,43 @@ public class firstClass {
 		WebElement signInButton=driver.findElement(By.xpath("//input[@id=\"signInSubmit\"]"));
 		signInButton.click();
 		
+		screenshot();
+		
+		driver.close();
+			
 	}
+	
+	public static void screenshot()
+	{
+		//pass //fail // skip 
+		try {
+			
+			//format setting the filename Sat_Apr_18_16-50-21_IST_2020
+			String fileName = (new Date()).toString().replace(" ", "_").replace(":", "-").trim()+ ".png";//
+					   //Tue_Mar_08_10-16-06_IST_2022.png                                                      
+	
+			
+			String destinationFilePath = System.getProperty("user.dir")+File.separator+"ScreenShots/" +fileName;
+			System.out.println(destinationFilePath);
+			try {
+			   
+				TakesScreenshot ts = (TakesScreenshot) driver;
+				File source = ts.getScreenshotAs(OutputType.FILE); //dynamic screenshots 
+				File destination=new File(destinationFilePath);
+				FileUtils.copyFile(source, destination);
+			} catch (Exception e) {
+				System.out.println("Exception while taking screenshot " + e.getMessage());
+			}
+			
+			
 
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	
 
+	}
 }
+
